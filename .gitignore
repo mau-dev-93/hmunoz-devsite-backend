@@ -20,9 +20,9 @@ Thumbs.db
 .aws-sam/
 
 # YAML templates
-*.template.yaml
-*.yml
-*.yaml
+# *.template.yaml
+# *.yml
+# *.yaml
 
 # Misc
 .idea/
