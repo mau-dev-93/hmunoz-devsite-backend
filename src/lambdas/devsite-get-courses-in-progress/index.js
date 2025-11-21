@@ -2,6 +2,7 @@ const { S3Client, GetObjectCommand } = require("@aws-sdk/client-s3");
 
 const s3 = new S3Client({});
 const BUCKET = process.env.CONTENT_BUCKET;
+const PREFIX = process.env.CONTENT_PREFIX;
 
 exports.handler = async (event) => {
     try {
@@ -20,7 +21,7 @@ exports.handler = async (event) => {
 
         const locale = localeParam === "en" ? "en" : "es";
 
-        const key = `v1/courses/in-progress/${locale}.json`;
+        const key = `${PREFIX}/courses/in-progress/${locale}.json`;
 
         const resp = await s3.send(
             new GetObjectCommand({

@@ -12,16 +12,8 @@ Globals:
       - x86_64
     Environment:
       Variables:
-        CONTENT_BUCKET: !Ref DevsiteContentBucket
-
-Resources:
-  # S3 - Bucket de contenido JSON
-  DevsiteContentBucket:
-    Type: AWS::S3::Bucket
-    Properties:
-      BucketName: !Sub devsite-mauricio-${AWS::AccountId}-${AWS::Region}
-      VersioningConfiguration:
-        Status: Enabled
+        CONTENT_BUCKET: devsite-mauricio
+        CONTENT_PREFIX: devsite-json/
 
   # API Gateway
   DevsiteApi:
@@ -33,6 +25,14 @@ Resources:
         AllowMethods: "'GET,OPTIONS'"
         AllowHeaders: "'Content-Type,Authorization,x-api-key'"
         AllowOrigin: "'*'"
+      Auth:
+        ApiKeyRequired: true
+        UsagePlan:
+          CreateUsagePlan: PER_API
+          UsagePlanName: devsite-usage-plan
+          Throttle:
+            BurstLimit: 100
+            RateLimit: 50
 
   # Lambda - GET /devsite-get-projects
   GetProjectsFunction:
@@ -43,8 +43,11 @@ Resources:
       #Handler: index.handler
       Description: Regresa lista de proyectos personales para el devsite
       Policies:
-        - S3ReadPolicy:
-            BucketName: !Ref DevsiteContentBucket
+        - Statement:
+            - Effect: Allow
+              Action:
+                - s3:GetObject
+              Resource: "arn:aws:s3:::devsite-mauricio/devsite-json/*"
       Events:
         GetProjects:
           Type: Api
@@ -52,8 +55,6 @@ Resources:
             RestApiId: !Ref DevsiteApi
             Path: /projects
             Method: GET
-            Auth:
-              ApiKeyRequired: true
 
   # Lambda - GET /devsite-get-courses-in-progress
   GetCoursesInProgressFunction:
@@ -64,8 +65,11 @@ Resources:
       #Handler: index.handler
       Description: Regresa lista de cursos en progreso para el devsite
       Policies:
-        - S3ReadPolicy:
-            BucketName: !Ref DevsiteContentBucket
+        - Statement:
+            - Effect: Allow
+              Action:
+                - s3:GetObject
+              Resource: "arn:aws:s3:::devsite-mauricio/devsite-json/*"
       Events:
         GetCoursesInProgress:
           Type: Api
@@ -73,38 +77,8 @@ Resources:
             RestApiId: !Ref DevsiteApi
             Path: /courses/in-progress
             Method: GET
-            Auth:
-              ApiKeyRequired: true
-
-  # API Key + Usage Plan
-  DevsiteApiKey:
-    Type: AWS::ApiGateway::ApiKey
-    Properties:
-      Name: devsite-api-key
-      Enabled: true
-
-  DevsiteUsagePlan:
-    Type: AWS::ApiGateway::UsagePlan
-    Properties:
-      UsagePlanName: devsite-usage-plan
-      ApiStages:
-        - ApiId: !Ref DevsiteApi
-          Stage: v1
-
-  DevsiteUsagePlanKey:
-    Type: AWS::ApiGateway::UsagePlanKey
-    Properties:
-      KeyId: !Ref DevsiteApiKey
-      KeyType: API_KEY
-      UsagePlanId: !Ref DevsiteUsagePlan
 
 Outputs:
   ApiUrl:
     Description: "Base URL of the Devsite API"
     Value: !Sub "https://${DevsiteApi}.execute-api.${AWS::Region}.amazonaws.com/v1"
-  ContentBucketName:
-    Description: "S3 Bucket where JSON content is stored"
-    Value: !Ref DevsiteContentBucket
-  DevsiteApiKeyValue:
-    Description: "API key for devsite API (add as x-api-key header)"
-    Value: !Ref DevsiteApiKey
