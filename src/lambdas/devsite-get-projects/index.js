@@ -9,7 +9,7 @@ exports.handler = async (event) => {
     try {
         const locale = event?.queryStringParameters?.locale === "en" ? "en" : "es";
 
-        const key = `${PREFIX}/projects/${locale}.json`;
+        const key = `${PREFIX}/v1/projects/${locale}.json`;
 
         const resp = await s3.send(
             new GetObjectCommand({

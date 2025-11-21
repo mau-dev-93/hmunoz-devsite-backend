@@ -13,7 +13,7 @@ Globals:
     Environment:
       Variables:
         CONTENT_BUCKET: devsite-mauricio
-        CONTENT_PREFIX: devsite-json/
+        CONTENT_PREFIX: json/
 
   # API Gateway
   DevsiteApi:

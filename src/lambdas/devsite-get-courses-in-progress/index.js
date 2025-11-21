@@ -21,7 +21,7 @@ exports.handler = async (event) => {
 
         const locale = localeParam === "en" ? "en" : "es";
 
-        const key = `${PREFIX}/courses/in-progress/${locale}.json`;
+        const key = `${PREFIX}/v1/courses/${locale}.json`;
 
         const resp = await s3.send(
             new GetObjectCommand({
