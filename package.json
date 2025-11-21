@@ -1,0 +1,16 @@
+{
+  "name": "hmunoz-devsite-backend",
+  "version": "1.0.0",
+  "description": "Backend for hmunoz-devsite 2025",
+  "license": "ISC",
+  "author": "Mauricio Muñoz",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "build": "sam build",
+    "deploy": "sam deploy"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.937.0"
+  }
+}

@@ -1,0 +1,39 @@
+# Node.js
+node_modules/
+npm-debug.log*
+package-lock.json
+yarn.lock
+
+# Logs
+logs/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.*
+
+# AWS SAM/Serverless
+.aws-sam/
+
+# YAML templates
+*.template.yaml
+*.yml
+*.yaml
+
+# Misc
+.idea/
+.vscode/
+coverage/
+dist/
+build/
+
+# Others
+*.swp
+*.swo
+
+# Ignore test output
+/test-output/
