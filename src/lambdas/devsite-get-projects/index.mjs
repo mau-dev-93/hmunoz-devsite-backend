@@ -1,15 +1,27 @@
-// src/projects/index.js
-const { S3Client, GetObjectCommand } = require("@aws-sdk/client-s3");
+import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
 
 const s3 = new S3Client({});
 const BUCKET = process.env.CONTENT_BUCKET;
-const PREFIX = process.env.CONTENT_PREFIX;
+const PREFIX = process.env.CONTENT_PREFIX ?? "";
 
-exports.handler = async (event) => {
+export const handler = async (event) => {
     try {
-        const locale = event?.queryStringParameters?.locale === "en" ? "en" : "es";
+        let payload = {};
 
-        const key = `${PREFIX}/v1/projects/${locale}.json`;
+        if (event?.body) {
+            try {
+                payload = JSON.parse(event.body);
+            } catch (e) {
+                console.error("Invalid JSON body for /projects", e);
+            }
+        }
+
+        const localeParam =
+            payload.locale || event?.queryStringParameters?.locale;
+
+        const locale = localeParam === "en" ? "en" : "es";
+
+        const key = `${PREFIX}v1/projects/${locale}.json`;
 
         const resp = await s3.send(
             new GetObjectCommand({

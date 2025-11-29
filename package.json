@@ -11,6 +11,8 @@
     "deploy": "sam deploy"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.937.0"
+    "@aws-sdk/client-dynamodb": "^3.940.0",
+    "@aws-sdk/client-s3": "^3.937.0",
+    "@aws-sdk/lib-dynamodb": "^3.940.0"
   }
 }

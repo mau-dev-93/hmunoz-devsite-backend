@@ -14,9 +14,9 @@ Globals:
       Variables:
         CONTENT_BUCKET: devsite-mauricio
         CONTENT_PREFIX: json/
+        COURSES_TABLE: devsite_courses
 
-Resources:  # <<--- ESTA LLAVE ES OBLIGATORIA Y VA AL NIVEL RAÍZ
-
+Resources: # <<--- ESTA LLAVE ES OBLIGATORIA Y VA AL NIVEL RAÍZ
   # API Gateway
   DevsiteApi:
     Type: AWS::Serverless::Api
@@ -67,11 +67,12 @@ Resources:  # <<--- ESTA LLAVE ES OBLIGATORIA Y VA AL NIVEL RAÍZ
       #Handler: index.handler
       Description: Regresa lista de cursos en progreso para el devsite
       Policies:
-        - Statement:
-            - Effect: Allow
-              Action:
-                - s3:GetObject
-              Resource: "arn:aws:s3:::devsite-mauricio/devsite-json/*"
+        - DynamoDBReadPolicy:
+            TableName: devsite_courses # ← permiso de solo lectura
+        #     - Effect: Allow
+        #       Action:
+        #         - s3:GetObject
+        #       Resource: "arn:aws:s3:::devsite-mauricio/devsite-json/*"
       Events:
         GetCoursesInProgress:
           Type: Api
