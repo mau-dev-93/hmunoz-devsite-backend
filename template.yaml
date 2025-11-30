@@ -28,7 +28,7 @@ Resources: # <<--- ESTA LLAVE ES OBLIGATORIA Y VA AL NIVEL RAÍZ
         AllowHeaders: "'Content-Type,Authorization,x-api-key'"
         AllowOrigin: "'*'"
       Auth:
-        ApiKeyRequired: true
+        # ApiKeyRequired: true
         UsagePlan:
           CreateUsagePlan: PER_API
           UsagePlanName: devsite-usage-plan
@@ -57,6 +57,8 @@ Resources: # <<--- ESTA LLAVE ES OBLIGATORIA Y VA AL NIVEL RAÍZ
             RestApiId: !Ref DevsiteApi
             Path: /projects
             Method: GET
+            Auth:
+              ApiKeyRequired: true
 
   # Lambda - GET /devsite-get-courses-in-progress
   GetCoursesInProgressFunction:
@@ -80,6 +82,8 @@ Resources: # <<--- ESTA LLAVE ES OBLIGATORIA Y VA AL NIVEL RAÍZ
             RestApiId: !Ref DevsiteApi
             Path: /courses/in-progress
             Method: GET
+            Auth:
+              ApiKeyRequired: true
 
 Outputs:
   ApiUrl:
